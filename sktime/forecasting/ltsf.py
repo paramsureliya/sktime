@@ -124,7 +124,7 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
             lr=lr,
-            random_state=random_state
+            random_state=random_state,
         )
 
     def __post_init__(self):
@@ -323,7 +323,9 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         gen = torch.Generator()
         if self.random_state is not None:
             gen.manual_seed(self.random_state)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
+        return DataLoader(
+            combined_dataset, self.batch_size, shuffle=True, generator=gen
+        )
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -887,7 +889,9 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         gen = torch.Generator()
         if self.random_state is not None:
             gen.manual_seed(self.random_state)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
+        return DataLoader(
+            combined_dataset, self.batch_size, shuffle=True, generator=gen
+        )
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -1005,7 +1009,7 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         Activation function to use. Defaults to relu and otherwise gelu.
     freq : str, optional (default="h")
         Frequency of the input data, relevant only if temporal_encoding is True.
-        
+
     random_state : int or None, default=None
         Sets the random seed for the DataLoader shuffle, ensuring reproducible
         training. If None, results may differ between runs.
@@ -1309,7 +1313,9 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         gen = torch.Generator()
         if self.random_state is not None:
             gen.manual_seed(self.random_state)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
+        return DataLoader(
+            combined_dataset, self.batch_size, shuffle=True, generator=gen
+        )
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

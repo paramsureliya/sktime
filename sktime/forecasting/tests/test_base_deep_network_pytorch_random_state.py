@@ -20,6 +20,7 @@ _torch_not_installed = not _check_soft_dependencies("torch", severity="none")
 # Parametrized: verify all 8 forecasters accept random_state in __init__
 # ---------------------------------------------------------------------------
 
+
 def _cinn_f_statistic(x, params):
     """Minimal f_statistic for CINNForecaster tests."""
     return x
@@ -103,6 +104,7 @@ def test_forecaster_accepts_random_state(module, cls_name, params):
 # ---------------------------------------------------------------------------
 # Base class dataloader seeding (SCINetForecaster uses base class directly)
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.skipif(_torch_not_installed, reason="skip if torch not installed")
 def test_base_train_dataloader_seeds_generator():
@@ -262,7 +264,7 @@ def test_esrnn_train_dataloader_seeds_generator():
 
 @pytest.mark.skipif(_torch_not_installed, reason="skip if torch not installed")
 def test_ltsf_transformer_train_dataloader_seeds_generator():
-    """Regression test: LTSFTransformerForecaster's overridden dataloader seeds generator.
+    """Regression test: LTSFTransformerForecaster overridden dataloader seed generator.
 
     LTSFTransformerForecaster overrides build_pytorch_train_dataloader with its
     own implementation using PytorchFormerDataset. The base class fix alone is

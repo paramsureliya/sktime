@@ -291,7 +291,9 @@ class ESRNNForecaster(BaseDeepNetworkPyTorch):
         gen = torch.Generator()
         if self.random_state is not None:
             gen.manual_seed(self.random_state)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
+        return DataLoader(
+            combined_dataset, self.batch_size, shuffle=True, generator=gen
+        )
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):

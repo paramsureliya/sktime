@@ -255,7 +255,9 @@ class BaseDeepNetworkPyTorch(BaseForecaster):
         gen = torch.Generator()
         if self.random_state is not None:
             gen.manual_seed(self.random_state)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
+        return DataLoader(
+            combined_dataset, self.batch_size, shuffle=True, generator=gen
+        )
 
     def _get_pretrain_pred_len(self, fh):
         """Get prediction length for pretraining.

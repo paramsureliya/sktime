@@ -158,7 +158,7 @@ class CINNForecaster(BaseDeepNetworkPyTorch):
         patience=5,
         delta=0.0001,
         val_split=0.2,
-        random_state=None
+        random_state=None,
     ):
         self.n_coupling_layers = n_coupling_layers
         self.hidden_dim_size = hidden_dim_size
