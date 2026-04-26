@@ -19,7 +19,7 @@ def test_convtimenet_random_state_zero_sets_seed():
 
     Fix: changed to `if self.random_state is not None:` so seed 0 is applied.
     """
-    from unittest.mock import MagicMock, call, patch
+    from unittest.mock import MagicMock, patch
 
     import numpy as np
     import pandas as pd
