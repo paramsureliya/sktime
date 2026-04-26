@@ -1,4 +1,4 @@
-﻿"""Tests for ESRNNForecaster."""
+"""Tests for ESRNNForecaster."""
 
 import pytest
 
