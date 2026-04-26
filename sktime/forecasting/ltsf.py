@@ -43,6 +43,9 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         keyword arguments to pass to optimizer
     lr : float, default=0.003
         learning rate to train model with
+    random_state : int or None, default=None
+        Sets the random seed for the DataLoader shuffle, ensuring reproducible
+        training. If None, results may differ between runs.
 
     References
     ----------
@@ -95,6 +98,7 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         lr=0.001,
         custom_dataset_train=None,
         custom_dataset_pred=None,
+        random_state=None,
     ):
         self.seq_len = seq_len
         self.pred_len = pred_len
@@ -109,6 +113,7 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         self.custom_dataset_train = custom_dataset_train
         self.custom_dataset_pred = custom_dataset_pred
         self.batch_size = batch_size
+        self.random_state = random_state
 
         super().__init__(
             num_epochs=num_epochs,
@@ -119,6 +124,7 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
             lr=lr,
+            random_state=random_state
         )
 
     def __post_init__(self):
@@ -312,7 +318,12 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         ]
 
         combined_dataset = ConcatDataset(datasets)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True)
+        import torch
+
+        gen = torch.Generator()
+        if self.random_state is not None:
+            gen.manual_seed(self.random_state)
+        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -341,6 +352,7 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
                 # For individual to make a difference
                 # num_channels needs to be > 1
                 "individual": True,
+                "random_state": 42,
             },
             {
                 "seq_len": 3,
@@ -394,6 +406,9 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
         keyword arguments to pass to optimizer
     lr : float, default=0.003
         learning rate to train model with
+    random_state : int or None, default=None
+        Sets the random seed for the DataLoader shuffle, ensuring reproducible
+        training. If None, results may differ between runs.
 
     References
     ----------
@@ -446,6 +461,7 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
         lr=0.001,
         custom_dataset_train=None,
         custom_dataset_pred=None,
+        random_state=None,
     ):
         self.seq_len = seq_len
         self.pred_len = pred_len
@@ -460,6 +476,7 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
         self.custom_dataset_train = custom_dataset_train
         self.custom_dataset_pred = custom_dataset_pred
         self.batch_size = batch_size
+        self.random_state = random_state
 
         super().__init__(
             num_epochs=num_epochs,
@@ -470,6 +487,7 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
             lr=lr,
+            random_state=random_state,
         )
 
     def __post_init__(self):
@@ -535,6 +553,7 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
                 # For individual to make a difference
                 # num_channels needs to be > 1
                 "individual": True,
+                "random_state": 42,
             },
             {
                 "seq_len": 2,
@@ -588,6 +607,9 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         keyword arguments to pass to optimizer
     lr : float, default=0.003
         learning rate to train model with
+    random_state : int or None, default=None
+        Sets the random seed for the DataLoader shuffle, ensuring reproducible
+        training. If None, results may differ between runs.
 
     References
     ----------
@@ -640,6 +662,7 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         lr=0.001,
         custom_dataset_train=None,
         custom_dataset_pred=None,
+        random_state=None,
     ):
         self.seq_len = seq_len
         self.pred_len = pred_len
@@ -654,6 +677,7 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         self.custom_dataset_train = custom_dataset_train
         self.custom_dataset_pred = custom_dataset_pred
         self.batch_size = batch_size
+        self.random_state = random_state
 
         super().__init__(
             num_epochs=num_epochs,
@@ -664,6 +688,7 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
             lr=lr,
+            random_state=random_state,
         )
 
     def __post_init__(self):
@@ -857,7 +882,12 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         ]
 
         combined_dataset = ConcatDataset(datasets)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True)
+        import torch
+
+        gen = torch.Generator()
+        if self.random_state is not None:
+            gen.manual_seed(self.random_state)
+        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -886,6 +916,7 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
                 # For individual to make a difference
                 # num_channels needs to be > 1
                 "individual": True,
+                "random_state": 42,
             },
             {
                 "seq_len": 3,
@@ -974,6 +1005,10 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         Activation function to use. Defaults to relu and otherwise gelu.
     freq : str, optional (default="h")
         Frequency of the input data, relevant only if temporal_encoding is True.
+        
+    random_state : int or None, default=None
+        Sets the random seed for the DataLoader shuffle, ensuring reproducible
+        training. If None, results may differ between runs.
 
     Examples
     --------
@@ -1028,6 +1063,7 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         dropout=0.1,
         activation="relu",
         freq="h",
+        random_state=None,
     ):
         self.seq_len = seq_len
         self.context_len = context_len
@@ -1059,6 +1095,7 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         self.dropout = dropout
         self.activation = activation
         self.freq = freq
+        self.random_state = random_state
 
         super().__init__(
             num_epochs=num_epochs,
@@ -1069,6 +1106,7 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
             lr=lr,
+            random_state=random_state,
         )
 
     def __post_init__(self):
@@ -1100,6 +1138,7 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
 
     def build_pytorch_train_dataloader(self, y):
         """Build PyTorch DataLoader for training."""
+        import torch
         from torch.utils.data import DataLoader
 
         if self.custom_dataset_train:
@@ -1127,7 +1166,10 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
                 temporal_encoding_type=self.temporal_encoding_type,
             )
 
-        return DataLoader(dataset, self.batch_size, shuffle=True)
+        gen = torch.Generator()
+        if self.random_state is not None:
+            gen.manual_seed(self.random_state)
+        return DataLoader(dataset, self.batch_size, shuffle=True, generator=gen)
 
     def build_pytorch_pred_dataloader(self, y, fh):
         """Build PyTorch DataLoader for prediction."""
@@ -1262,7 +1304,12 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         ]
 
         combined_dataset = ConcatDataset(datasets)
-        return DataLoader(combined_dataset, self.batch_size, shuffle=True)
+        import torch
+
+        gen = torch.Generator()
+        if self.random_state is not None:
+            gen.manual_seed(self.random_state)
+        return DataLoader(combined_dataset, self.batch_size, shuffle=True, generator=gen)
 
     @classmethod
     def get_test_params(cls, parameter_set="default"):
@@ -1273,7 +1320,6 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         parameter_set : str, default="default"
             Name of the set of test parameters to return, for use in tests. If no
             special parameters are defined for a value, will return ``"default"`` set.
-
 
         Returns
         -------
@@ -1299,6 +1345,7 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
                 "num_epochs": 1,
                 "batch_size": 1,
                 "lr": 0.008,
+                "random_state": 42,
             },
             {
                 "seq_len": 4,
