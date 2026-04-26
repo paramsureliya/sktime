@@ -44,7 +44,7 @@ def test_scinet_num_stacks_passed_to_network():
             forecaster._y = MagicMock()
             forecaster._y.shape = (50, 1)
             forecaster._build_network(fh=3)
-        except Exception:
+        except Exception:  # noqa: S110
             pass  # network instantiation may fail in mock environment
 
     if "num_stacks" in captured:
