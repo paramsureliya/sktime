@@ -215,6 +215,7 @@ def test_base_train_dataloader_none_does_not_seed():
 # ESRNN: has its own overridden build_pytorch_train_dataloader
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.skipif(_torch_not_installed, reason="skip if torch not installed")
 def test_esrnn_train_dataloader_seeds_generator():
     """Regression test: ESRNNForecaster's overridden dataloader seeds generator.
@@ -258,6 +259,7 @@ def test_esrnn_train_dataloader_seeds_generator():
 # LTSFTransformer: has its own overridden build_pytorch_train_dataloader
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.skipif(_torch_not_installed, reason="skip if torch not installed")
 def test_ltsf_transformer_train_dataloader_seeds_generator():
     """Regression test: LTSFTransformerForecaster's overridden dataloader seeds generator.
@@ -296,9 +298,7 @@ def test_ltsf_transformer_train_dataloader_seeds_generator():
         mock_gen_class.return_value = mock_gen
 
         with patch("torch.utils.data.DataLoader"):
-            with patch(
-                "sktime.networks.ltsf.data.dataset.PytorchFormerDataset"
-            ):
+            with patch("sktime.networks.ltsf.data.dataset.PytorchFormerDataset"):
                 forecaster.build_pytorch_train_dataloader(y)
 
     mock_gen.manual_seed.assert_called_once_with(42)
