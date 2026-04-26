@@ -28,13 +28,14 @@ def test_convtimenet_random_state_zero_sets_seed():
 
     y = pd.Series(
         np.arange(50, dtype=float),
-        index=pd.date_range("2000-01", periods=50, freq="M"),
+        index=pd.date_range("2000-01", periods=50, freq="ME"),
     )
 
-    forecaster = ConvTimeNetForecaster(
-        context_window=10,
-        random_state=0,
-    )
+    params = ConvTimeNetForecaster.get_test_params()
+    if isinstance(params, list):
+        params = params[0]
+    params["random_state"] = 0
+    forecaster = ConvTimeNetForecaster(**params)
 
     with patch("torch.Generator") as mock_generator_class:
         mock_gen = MagicMock()
