@@ -47,9 +47,7 @@ def test_convtimenet_random_state_zero_sets_seed():
         mock_generator_class.return_value = mock_gen
 
         with patch("torch.utils.data.DataLoader"):
-            with patch(
-                "sktime.forecasting.base.adapters._pytorch.PyTorchTrainDataset"
-            ):
+            with patch("sktime.forecasting.base.adapters._pytorch.PyTorchTrainDataset"):
                 forecaster.build_pytorch_train_dataloader(y)
     # manual_seed must have been called with 0
     mock_gen.manual_seed.assert_called_once_with(0)
