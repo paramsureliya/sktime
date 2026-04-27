@@ -55,7 +55,7 @@ _FORECASTER_PARAMS = [
     (
         "sktime.forecasting.ltsf",
         "LTSFTransformerForecaster",
-        {"seq_len": 8, "pred_len": 3, "num_epochs": 1},
+        {"seq_len": 8, "pred_len": 3, "num_epochs": 1, "context_len": 8},
     ),
     (
         "sktime.forecasting.rbf_forecaster",
@@ -126,7 +126,7 @@ def test_base_train_dataloader_seeds_generator():
 
     y = pd.Series(
         np.arange(50, dtype=float),
-        index=pd.date_range("2000-01", periods=50, freq="M"),
+        index=pd.date_range("2000-01", periods=50, freq="ME"),
     )
 
     forecaster = SCINetForecaster(seq_len=8, random_state=42)
@@ -161,7 +161,7 @@ def test_base_train_dataloader_random_state_zero_seeds_generator():
 
     y = pd.Series(
         np.arange(50, dtype=float),
-        index=pd.date_range("2000-01", periods=50, freq="M"),
+        index=pd.date_range("2000-01", periods=50, freq="ME"),
     )
 
     forecaster = SCINetForecaster(seq_len=8, random_state=0)
@@ -195,7 +195,7 @@ def test_base_train_dataloader_none_does_not_seed():
 
     y = pd.Series(
         np.arange(50, dtype=float),
-        index=pd.date_range("2000-01", periods=50, freq="M"),
+        index=pd.date_range("2000-01", periods=50, freq="ME"),
     )
 
     forecaster = SCINetForecaster(seq_len=8, random_state=None)
@@ -235,7 +235,7 @@ def test_esrnn_train_dataloader_seeds_generator():
 
     y = pd.Series(
         np.arange(50, dtype=float),
-        index=pd.date_range("2000-01", periods=50, freq="M"),
+        index=pd.date_range("2000-01", periods=50, freq="ME"),
     )
 
     forecaster = ESRNNForecaster(
@@ -279,11 +279,12 @@ def test_ltsf_transformer_train_dataloader_seeds_generator():
 
     y = pd.Series(
         np.arange(50, dtype=float),
-        index=pd.date_range("2000-01", periods=50, freq="M"),
+        index=pd.date_range("2000-01", periods=50, freq="ME"),
     )
 
     forecaster = LTSFTransformerForecaster(
         seq_len=8,
+        context_len=8,
         pred_len=3,
         num_epochs=1,
         random_state=42,
